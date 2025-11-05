@@ -1,59 +1,29 @@
-# Angular
+# UPSTDC Project Monitoring Frontend (Angular)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.1.
+This Angular app provides the user interface for the Project Monitoring System, including authentication, dashboards, and feature modules for users, projects, tenders, contractors, funds, milestones, inspections, payments, geo-tagging, and reports.
 
 ## Development server
-
-To start a local development server, run:
-
 ```bash
-ng serve
+npm install
+npm start
 ```
+By default, the app runs at http://localhost:3000 with SSR static hosting handled by Express when built.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## API base URL configuration
+The app reads API base URL from a global window variable when running in the browser:
+- window.__APP_API_BASE_URL__ (set by hosting environment, optional)
+If not set, it defaults to '/api'. Configure your reverse proxy accordingly or inject the variable in index.html before the Angular bundle.
 
-## Code scaffolding
+## Authentication
+- JWT access token is stored in localStorage (keys: pm_access_token, pm_refresh_token).
+- An HTTP interceptor injects the Bearer token and auto-logs out on 401.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Routes and Access
+- /auth/login (public)
+- All other routes are protected by an auth guard; Users page requires ADMIN role.
 
-```bash
-ng generate component component-name
-```
+## Styling
+Minimal responsive styling with a sidebar layout and header. Shared components include table, file upload, loading overlay, and toast notifications.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Notes
+This is a functional skeleton wired to call backend endpoints. Integrate with the backend URLs as per deployment.
