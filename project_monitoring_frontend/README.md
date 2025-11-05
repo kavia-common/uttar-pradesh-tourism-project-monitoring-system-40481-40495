@@ -7,12 +7,16 @@ This Angular app provides the user interface for the Project Monitoring System, 
 npm install
 npm start
 ```
-By default, the app runs at http://localhost:3000 with SSR static hosting handled by Express when built.
+By default, the app runs at http://localhost:3000.
 
 ## API base URL configuration
 The app reads API base URL from a global window variable when running in the browser:
 - window.__APP_API_BASE_URL__ (set by hosting environment, optional)
-If not set, it defaults to '/api'. Configure your reverse proxy accordingly or inject the variable in index.html before the Angular bundle.
+If not set:
+- dev default: http://localhost:3001/api (backend should expose /api)
+- prod default: /api (assumes reverse proxy)
+
+You can also hardcode environment.ts during local development if needed.
 
 ## Authentication
 - JWT access token is stored in localStorage (keys: pm_access_token, pm_refresh_token).
@@ -22,8 +26,15 @@ If not set, it defaults to '/api'. Configure your reverse proxy accordingly or i
 - /auth/login (public)
 - All other routes are protected by an auth guard; Users page requires ADMIN role.
 
+Seeded admin (for local E2E):
+- Email: admin@example.com
+- Password: Admin@123
+(Adjust if you changed the seed file)
+
 ## Styling
 Minimal responsive styling with a sidebar layout and header. Shared components include table, file upload, loading overlay, and toast notifications.
 
 ## Notes
-This is a functional skeleton wired to call backend endpoints. Integrate with the backend URLs as per deployment.
+- Ensure CORS_ALLOWED_ORIGINS on backend includes http://localhost:3000 for local dev.
+- For file upload, the API expects multipart/form-data at POST /files/upload; download via GET /files/{filename}.
+- Reports: GET /api/reports/projects (JSON) and /api/reports/projects.csv (CSV).
